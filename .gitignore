@@ -12,3 +12,6 @@ dist/
 nosetests.xml
 coverage.xml
 docs/_build/
+lib/
+bin/
+pyvenv.cfg

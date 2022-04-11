@@ -119,7 +119,8 @@ class TestDeclarativeBase(SQLAHelperTestCase):
         control = [u"Wilma", u"Fred", u"Betty", u"Barney"]
         self.assertEqual(result, control)
 
-    def test1_without_transaction_manager(self):
+    def test1_with_transaction_manager(self):
+        import transaction
         Base = sqlahelper.get_base()
         class Person(Base):
             __tablename__ = "people"
@@ -134,10 +135,9 @@ class TestDeclarativeBase(SQLAHelperTestCase):
         barney = Person(id=3, first_name=u"Barney", last_name=u"Rubble")
         betty = Person(id=4, first_name=u"Betty", last_name=u"Rubble")
         Session = sqlahelper.get_session()
-        Session.configure(extension=None)  # XXX Kludge for SQLAlchemy/ZopeTransactionExtension bug
-        sess = Session()
+        sess = Session
         sess.add_all([fred, wilma, barney, betty])
-        sess.commit()
+        transaction.commit()
         sess.expunge_all()
         del fred, wilma, barney, betty
         # Can we get back a record?
